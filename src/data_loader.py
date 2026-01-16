@@ -7,4 +7,16 @@ class AnimeDataLoader:
 
     def load_and_process(self):
         df = pd.read_csv(self.original_csv, encoding='utf-8', error_bad_lines=False).dropna()
+        required_cols = {'Name', 'Genres', 'synopsis'}
+
+        missing = required_cols - set(df.columns)
+        if missing:
+            raise ValueError("Missing column in CSV File")
         
+        df['combined_info'] = (
+            "Title:" = df["Name"] + ".. Overview:" + df["synopsis"] + "Genres": df["Genres"]
+        )
+
+        df[['comnined_info']].to_csv(self.processed_csv, Index=False,encoding='utf-8')
+
+        return self.processed_csv
